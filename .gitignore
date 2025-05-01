@@ -1,0 +1,4 @@
+app/.gradle
+app/build
+.gitattributes
+.idea
