@@ -18,8 +18,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.javalin:javalin:4.3.0")
-    implementation("org.slf4j:slf4j-simple:1.7.36")
+    implementation ("io.javalin:javalin:4.3.0")
+    implementation ("org.slf4j:slf4j-simple:1.7.36")
 
     implementation ("org.thymeleaf:thymeleaf:3.0.15.RELEASE")
     implementation ("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0")
@@ -51,17 +51,10 @@ dependencies {
     implementation ("com.konghq:unirest-java:3.13.6")
     implementation ("org.jsoup:jsoup:1.15.2")
 
-    compileOnly ("org.projectlombok:lombok:1.18.24")
-    annotationProcessor ("org.projectlombok:lombok:1.18.24")
-    testCompileOnly ("org.projectlombok:lombok:1.18.24")
-    testAnnotationProcessor ("org.projectlombok:lombok:1.18.24")
-    // Use JUnit Jupiter for testing.
-    testImplementation(libs.junit.jupiter)
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // This dependency is used by the application.
-    implementation(libs.guava)
+    compileOnly ("org.projectlombok:lombok:1.18.30")
+    annotationProcessor ("org.projectlombok:lombok:1.18.30")
+    testCompileOnly ("org.projectlombok:lombok:1.18.30")
+    testAnnotationProcessor ("org.projectlombok:lombok:1.18.30")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -99,4 +92,6 @@ tasks.jacocoTestReport {
     reports {
         xml.required = true
     }
+
+
 }

@@ -10,6 +10,7 @@ import hexlet.code.model.UrlCheck;
 import hexlet.code.model.query.QUrlCheck;
 import io.ebean.PagedList;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -27,12 +28,11 @@ public class UrlController {
     private static final int ROWS_PER_PAGE = 10;
 
     public static Handler addUrl = ctx -> {
-        String urlFromForm = ctx.formParam("url");
+        String formUrl = ctx.formParam("url");
         URL url;
 
         try {
-            assert urlFromForm != null;
-            url = new URL(urlFromForm);
+            url = new URL(formUrl);
         } catch (Exception e) {
             ctx.sessionAttribute("flash", "Некорректный URL");
             ctx.sessionAttribute("flash-type", "danger");
@@ -41,9 +41,9 @@ public class UrlController {
         }
 
         String parsedUrl = url.getProtocol() + "://" + url.getAuthority();
-        Url urlFromDb = new QUrl().name.equalTo(parsedUrl).findOne();
+        Url savedUrl = new QUrl().name.equalTo(parsedUrl).findOne();
 
-        if (urlFromDb != null) {
+        if (savedUrl != null) {
             ctx.sessionAttribute("flash", "Страница уже существует");
             ctx.sessionAttribute("flash-type", "info");
             ctx.redirect("/urls");
@@ -63,6 +63,7 @@ public class UrlController {
                 .setMaxRows(ROWS_PER_PAGE)
                 .orderBy().id.asc()
                 .findPagedList();
+
         List<Url> urls = pagedUrls.getList();
 
         int lastPage = pagedUrls.getTotalPageCount() + 1;
@@ -83,7 +84,9 @@ public class UrlController {
             throw new NotFoundResponse();
         }
 
-        List<UrlCheck> checks = new QUrlCheck().url.equalTo(url).orderBy().id.desc().findList();
+        List<UrlCheck> checks = url.getUrlChecks().stream()
+                .sorted(Comparator.comparing(UrlCheck::getId).reversed())
+                .toList();
 
         ctx.attribute("url", url);
         ctx.attribute("checks", checks);
@@ -92,13 +95,16 @@ public class UrlController {
 
     public static Handler addCheck = ctx -> {
         long id = ctx.pathParamAsClass("id", Integer.class).getOrDefault(null);
-        Url urlFromDb = new QUrl().id.equalTo(id).findOne();
+        Url savedUrl = new QUrl().id.equalTo(id).findOne();
 
-        assert urlFromDb != null;
-        String urlFromDbName = urlFromDb.getName();
+        if (savedUrl.getName() == null) {
+            throw new NotFoundResponse();
+        }
+
+        String savedUrlName = savedUrl.getName();
 
         try {
-            HttpResponse<String> response = Unirest.get(urlFromDbName).asString();
+            HttpResponse<String> response = Unirest.get(savedUrlName).asString();
             int statusCode = response.getStatus();
             Document doc = Jsoup.parse(response.getBody());
 
@@ -110,7 +116,7 @@ public class UrlController {
                     Objects.requireNonNull(doc.selectFirst("h1")).text()
                     : null;
 
-            UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, urlFromDb);
+            UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, savedUrl);
             urlCheck.save();
             ctx.sessionAttribute("flash", "Страница успешно проверена");
             ctx.sessionAttribute("flash-type", "success");

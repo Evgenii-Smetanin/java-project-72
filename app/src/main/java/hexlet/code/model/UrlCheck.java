@@ -4,8 +4,15 @@ import io.ebean.Model;
 import io.ebean.annotation.WhenCreated;
 import lombok.Getter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Getter
@@ -35,5 +42,10 @@ public final class UrlCheck extends Model {
         this.h1 = h1;
         this.description = description;
         this.url = url;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        ZoneId zoneId = ZoneId.of("Europe/Moscow");
+        return LocalDateTime.ofInstant(this.createdAt, zoneId);
     }
 }
