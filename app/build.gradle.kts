@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     checkstyle
+    jacoco
 }
 
 repositories {
@@ -17,6 +18,43 @@ repositories {
 }
 
 dependencies {
+    implementation("io.javalin:javalin:4.3.0")
+    implementation("org.slf4j:slf4j-simple:1.7.36")
+
+    implementation ("org.thymeleaf:thymeleaf:3.0.15.RELEASE")
+    implementation ("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0")
+    implementation ("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
+    implementation ("org.webjars:bootstrap:5.1.3")
+
+    implementation ("com.h2database:h2:2.1.212")
+    implementation ("org.postgresql:postgresql:42.3.3")
+
+    implementation ("io.ebean:ebean:12.15.1")
+    implementation ("io.ebean:ebean-ddl-generator:12.15.1")
+    implementation ("io.ebean:ebean-querybean:12.15.1")
+    implementation ("io.ebean:ebean-migration:12.15.1")
+    implementation ("io.ebean:ebean-annotation:7.7")
+    implementation ("org.projectlombok:lombok:1.18.22")
+    implementation ("org.projectlombok:lombok:1.18.22")
+    annotationProcessor ("io.ebean:querybean-generator:12.15.1")
+
+    implementation ("org.glassfish.jaxb:jaxb-runtime:2.3.5")
+    implementation ("javax.activation:activation:1.1.1")
+
+    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+    testImplementation ("org.junit.jupiter:junit-jupiter-params:5.8.2")
+    testImplementation ("org.assertj:assertj-core:3.22.0")
+    testImplementation ("io.ebean:ebean-test:12.15.1")
+    testImplementation ("com.konghq:unirest-java:3.13.6")
+
+    testImplementation ("com.squareup.okhttp3:mockwebserver:4.9.2")
+    implementation ("com.konghq:unirest-java:3.13.6")
+    implementation ("org.jsoup:jsoup:1.15.2")
+
+    compileOnly ("org.projectlombok:lombok:1.18.24")
+    annotationProcessor ("org.projectlombok:lombok:1.18.24")
+    testCompileOnly ("org.projectlombok:lombok:1.18.24")
+    testAnnotationProcessor ("org.projectlombok:lombok:1.18.24")
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
 
@@ -42,7 +80,23 @@ checkstyle {
     toolVersion = "10.0"
 }
 
+jacoco {
+    toolVersion = "0.8.13"
+    reportsDirectory = layout.buildDirectory.dir("customJacocoReportDir")
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
+    reports {
+        xml.required = true
+    }
 }
