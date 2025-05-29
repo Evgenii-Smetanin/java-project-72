@@ -7,3 +7,5 @@
 [![Unit Tests](https://github.com/qltysh/qlty-action/actions/workflows/tests.yml/badge.svg)](https://github.com/qltysh/qlty-action/actions/workflows/tests.yml)
 [![Latest release](https://img.shields.io/github/v/release/qltysh/qlty-action?v=3)](https://github.com/qltysh/qlty-action/releases)
 [![docs.qlty.sh](https://img.shields.io/badge/docs-docs.qlty.sh-08b2b7)](https://docs.qlty.sh)
+
+https://page-analyzer-7ka4.onrender.com

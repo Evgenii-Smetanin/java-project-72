@@ -8,6 +8,9 @@ import java.sql.SQLException;
 
 @Slf4j
 public class App {
+    private static String getDatabaseUrl() {
+        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project");
+    }
 
     private static int getPort() {
         String port = System.getenv().getOrDefault("PORT", "7070");
