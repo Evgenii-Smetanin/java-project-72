@@ -21,7 +21,7 @@ public class App {
 
     private static int getPort() {
         String port = System.getenv().getOrDefault("PORT", "7070");
-        return Integer.valueOf(port);
+        return Integer.parseInt(port);
     }
 
     public static void main(String[] args) throws IOException, SQLException {
@@ -35,7 +35,7 @@ public class App {
         hikariConfig.setJdbcUrl(getDatabaseUrl());
 
         var dataSource = new HikariDataSource(hikariConfig);
-        var sql = readResourceFile("schema.sql");
+        var sql = readResourceFile("Schema.sql");
 
         log.info(sql);
         try (var connection = dataSource.getConnection();
