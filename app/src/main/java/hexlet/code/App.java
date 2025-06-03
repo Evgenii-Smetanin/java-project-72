@@ -35,7 +35,8 @@ public class App {
         hikariConfig.setJdbcUrl(getDatabaseUrl());
 
         var dataSource = new HikariDataSource(hikariConfig);
-        var sql = readResourceFile("Schema.sql");
+        //var sql = readResourceFile("h2/Schema.sql"); //dev
+        var sql = readResourceFile("postgres/Schema.sql"); //prod
 
         log.info(sql);
         try (var connection = dataSource.getConnection();
