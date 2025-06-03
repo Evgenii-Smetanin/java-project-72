@@ -8,8 +8,8 @@ import gg.jte.resolve.ResourceCodeResolver;
 import hexlet.code.controller.UrlController;
 import hexlet.code.repository.Repository;
 import io.javalin.Javalin;
-import lombok.extern.slf4j.Slf4j;
 import io.javalin.rendering.template.JavalinJte;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.IOException;
