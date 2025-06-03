@@ -11,4 +11,8 @@ public class Url {
     private int id;
     private String name;
     private LocalDateTime createdAt;
+
+    public Url(String url) {
+        this.name = url;
+    }
 }

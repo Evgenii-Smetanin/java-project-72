@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.controller.UrlController;
 import hexlet.code.repository.Repository;
 import io.javalin.Javalin;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +56,7 @@ public class App {
         });
 
         app.get("/", ctx -> ctx.render("index.jte"));
+        app.post("/urls", UrlController::save);
 
         return app;
     }
