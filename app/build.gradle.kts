@@ -15,9 +15,12 @@ dependencies {
     implementation("com.h2database:h2:2.3.232")
     implementation("com.zaxxer:HikariCP:6.3.0")
 
-    implementation ("org.thymeleaf:thymeleaf:3.0.15.RELEASE")
-    implementation ("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0")
-    implementation ("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
+    implementation("gg.jte:jte:3.2.1")
+    implementation("io.javalin:javalin-rendering:6.6.0")
+
+//    implementation ("org.thymeleaf:thymeleaf:3.0.15.RELEASE")
+//    implementation ("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0")
+//    implementation ("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
     implementation ("org.webjars:bootstrap:5.1.3")
 
     implementation ("org.postgresql:postgresql:42.3.3")
