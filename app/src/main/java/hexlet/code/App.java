@@ -57,6 +57,7 @@ public class App {
 
         app.get("/", ctx -> ctx.render("index.jte"));
         app.post("/urls", UrlController::save);
+        app.get("/urls", UrlController::index);
 
         return app;
     }
