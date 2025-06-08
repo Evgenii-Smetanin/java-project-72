@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class App {
     private static String getDatabaseUrl() {
-        var JDBCUrl =  System.getenv().getOrDefault("JDBC_DATABASE_URL",
+        var databaseUrl =  System.getenv().getOrDefault("JDBC_DATABASE_URL",
                 "jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
-        log.info("JDBC URL: {}", JDBCUrl);
-        return JDBCUrl;
+        log.info("JDBC URL: {}", databaseUrl);
+        return databaseUrl;
     }
 
     private static int getPort() {
