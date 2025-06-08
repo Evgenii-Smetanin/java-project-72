@@ -4,6 +4,9 @@ import hexlet.code.model.Url;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +18,8 @@ public class UrlRepository extends Repository {
 
         try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, url.getName());
-            preparedStatement.setString(2, url.getCreatedAt().toString());
+            preparedStatement.setString(2, url.getCreatedAt()
+                    .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             preparedStatement.executeUpdate();
         }
     }
@@ -31,7 +35,7 @@ public class UrlRepository extends Repository {
             if (resultSet.next()) {
                 var id = Integer.parseInt(resultSet.getString("id"));
                 var name = resultSet.getString("name");
-                var createdAt = LocalDateTime.parse(resultSet.getString("created_at"));
+                var createdAt = parseDateTime(resultSet.getString("created_at"));
 
                 var url = new Url(id, name, createdAt);
                 urls.add(url);
@@ -39,5 +43,16 @@ public class UrlRepository extends Repository {
         }
 
         return urls;
+    }
+
+    private static LocalDateTime parseDateTime(String dateString) {
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM-dd HH:mm:ss")
+                .optionalStart()
+                .appendFraction(ChronoField.MICRO_OF_SECOND, 0, 6, true)
+                .optionalEnd()
+                .toFormatter();
+
+        return LocalDateTime.parse(dateString, formatter);
     }
 }

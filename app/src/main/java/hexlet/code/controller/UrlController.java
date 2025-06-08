@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 public class UrlController {
+
     public static void save(Context ctx) throws SQLException {
         var address = ctx.formParam("url");
         URI uri = URI.create(address);
