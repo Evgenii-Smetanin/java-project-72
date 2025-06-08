@@ -3,6 +3,7 @@ package hexlet.code.repository;
 import hexlet.code.exception.UrlExistsException;
 import hexlet.code.model.Url;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,22 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UrlRepository extends Repository {
-    public static Url findById(String urlId) throws SQLException {
+    public static Url findById(int urlId) throws SQLException {
         var sql = "SELECT * FROM url WHERE id = ?";
-
-        Url url = null;
+        Url url;
 
         try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
-            preparedStatement.setString(1, urlId);
-            var resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                var id = Integer.parseInt(resultSet.getString("id"));
-                var name = resultSet.getString("name");
-                var createdAt = parseDateTime(resultSet.getString("created_at"));
-
-                url = new Url(id, name, createdAt);
-            }
+            preparedStatement.setInt(1, urlId);
+            url = getUrl(preparedStatement);
         }
 
         return url;
@@ -35,20 +27,11 @@ public class UrlRepository extends Repository {
 
     public static Url findByName(String urlName) throws SQLException {
         var sql = "SELECT * FROM url WHERE name = ?";
-
-        Url url = null;
+        Url url;
 
         try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, urlName);
-            var resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                var id = Integer.parseInt(resultSet.getString("id"));
-                var name = resultSet.getString("name");
-                var createdAt = parseDateTime(resultSet.getString("created_at"));
-
-                url = new Url(id, name, createdAt);
-            }
+            url = getUrl(preparedStatement);
         }
 
         return url;
@@ -56,7 +39,7 @@ public class UrlRepository extends Repository {
 
     public static void save(Url url) throws SQLException {
         if (findByName(url.getName()) != null) {
-            throw new UrlExistsException("Url с именем " + url.getName() + " уже существует");
+            throw new UrlExistsException("Страница уже существует");
         }
 
         var sql = "INSERT INTO url (name, created_at) VALUES (?, ?)";
@@ -90,6 +73,21 @@ public class UrlRepository extends Repository {
         }
 
         return urls;
+    }
+
+    private static Url getUrl(PreparedStatement preparedStatement) throws SQLException {
+        var resultSet = preparedStatement.executeQuery();
+        Url url = null;
+
+        if (resultSet.next()) {
+            var id = Integer.parseInt(resultSet.getString("id"));
+            var name = resultSet.getString("name");
+            var createdAt = parseDateTime(resultSet.getString("created_at"));
+
+            url = new Url(id, name, createdAt);
+        }
+
+        return url;
     }
 
     private static LocalDateTime parseDateTime(String dateString) {

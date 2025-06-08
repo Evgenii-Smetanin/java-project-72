@@ -2,6 +2,7 @@ package hexlet.code.controller;
 
 import hexlet.code.exception.UrlExistsException;
 import hexlet.code.model.Url;
+import hexlet.code.model.dto.UrlPage;
 import hexlet.code.model.dto.UrlsPage;
 import hexlet.code.repository.UrlRepository;
 import io.javalin.http.Context;
@@ -55,5 +56,20 @@ public class UrlController {
         page.setFlash(flash);
 
         ctx.render("urls/index.jte", model("page", page));
+    }
+
+    public static void show(Context ctx) throws SQLException, UnsupportedEncodingException {
+        var id = ctx.pathParamAsClass("id", Integer.class).get();
+        var url = UrlRepository.findById(id);
+
+        if (url == null) {
+            ctx.sessionAttribute("flash", "Страница не найдена");
+            ctx.redirect("/urls");
+            return;
+        }
+
+        UrlPage page = new UrlPage(url);
+
+        ctx.render("urls/show.jte", model("page", page));
     }
 }

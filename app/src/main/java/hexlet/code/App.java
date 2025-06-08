@@ -59,6 +59,7 @@ public class App {
         app.get("/", BaseController::index);
         app.post("/urls", UrlController::save);
         app.get("/urls", UrlController::index);
+        app.get("/urls/{id}", UrlController::show);
 
         return app;
     }
