@@ -22,11 +22,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class App {
     private static String getDatabaseUrl() {
-        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
+        var JDBCUrl =  System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
+        log.info("JDBC URL: {}", JDBCUrl);
+        return JDBCUrl;
     }
 
     private static int getPort() {
         String port = System.getenv().getOrDefault("PORT", "7070");
+        log.info("PORT: {}", port);
         return Integer.parseInt(port);
     }
 
@@ -41,6 +44,7 @@ public class App {
 
         var dataSource = new HikariDataSource(hikariConfig);
         var sqlLocation = System.getenv().getOrDefault("SCHEMA_LOCATION", "h2/Schema.sql");
+        log.info("Schema location: {}", sqlLocation);
 
         var sql = readResourceFile(sqlLocation);
 
