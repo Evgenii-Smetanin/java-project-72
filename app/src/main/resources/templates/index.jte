@@ -1,4 +1,6 @@
-<!doctype html>
+@import hexlet.code.model.dto.BasePage
+@param BasePage page
+
 <html lang="en">
 
 <head>
@@ -22,6 +24,9 @@
                     <div class="mb-3">
                         <label for="url-input" class="form-label">Ссылка</label>
                         <input type="text" class="form-control" id="url-input" name="url" aria-label="url" required>
+                        @if(page != null && page.getFlash() != null)
+                            <p>${page.getFlash()}</p>
+                        @endif
                         <div class="invalid-feedback">
                             Пожалуйста, введите ссылку.
                         </div>

@@ -18,6 +18,9 @@
 <section class="py-4">
     <div class="container-lg">
         <h1 class="mb-4">Сайты</h1>
+        @if(page != null && page.getFlash() != null)
+        <p>${page.getFlash()}</p>
+        @endif
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>Список сайтов</span>

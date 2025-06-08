@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.controller.BaseController;
 import hexlet.code.controller.UrlController;
 import hexlet.code.repository.Repository;
 import io.javalin.Javalin;
@@ -55,7 +56,7 @@ public class App {
             config.fileRenderer(new JavalinJte(createTemplateEngine()));
         });
 
-        app.get("/", ctx -> ctx.render("index.jte"));
+        app.get("/", BaseController::index);
         app.post("/urls", UrlController::save);
         app.get("/urls", UrlController::index);
 
