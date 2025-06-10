@@ -21,24 +21,24 @@ dependencies {
 //    implementation ("org.thymeleaf:thymeleaf:3.0.15.RELEASE")
 //    implementation ("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0")
 //    implementation ("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
-    implementation ("org.webjars:bootstrap:5.1.3")
+//    implementation ("org.webjars:bootstrap:5.1.3")
 
     implementation ("org.postgresql:postgresql:42.3.3")
 
     implementation ("org.projectlombok:lombok:1.18.22")
     implementation ("org.projectlombok:lombok:1.18.22")
 
-    implementation ("org.glassfish.jaxb:jaxb-runtime:2.3.5")
-    implementation ("javax.activation:activation:1.1.1")
+//    implementation ("org.glassfish.jaxb:jaxb-runtime:2.3.5")
+//    implementation ("javax.activation:activation:1.1.1")
 
     testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.8.2")
     testImplementation ("org.junit.jupiter:junit-jupiter-params:5.8.2")
     testImplementation ("org.assertj:assertj-core:3.22.0")
-    testImplementation ("com.konghq:unirest-java:3.13.6")
+//    testImplementation ("com.konghq:unirest-java:3.13.6")
 
-    testImplementation ("com.squareup.okhttp3:mockwebserver:4.9.2")
-    implementation ("com.konghq:unirest-java:3.13.6")
-    implementation ("org.jsoup:jsoup:1.15.2")
+//    testImplementation ("com.squareup.okhttp3:mockwebserver:4.9.2")
+//    implementation ("com.konghq:unirest-java:3.13.6")
+//    implementation ("org.jsoup:jsoup:1.15.2")
 
     compileOnly ("org.projectlombok:lombok:1.18.30")
     annotationProcessor ("org.projectlombok:lombok:1.18.30")

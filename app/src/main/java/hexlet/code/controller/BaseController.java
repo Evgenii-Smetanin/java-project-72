@@ -4,7 +4,7 @@ import hexlet.code.model.dto.BasePage;
 import io.javalin.http.Context;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
+//import java.nio.charset.StandardCharsets;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
