@@ -29,6 +29,7 @@
                 <table class="table table-striped table-bordered table-hover mb-0">
                     <thead class="table-light">
                     <tr>
+                        <th style="width: 5%;">ID</th>
                         <th style="width: 5%;">Имя</th>
                         <th style="width: 20%;">Последняя проверка</th>
                         <th style="width: 10%;">Код ответа</th>
@@ -41,6 +42,7 @@
                         <td>${url.getId()}</td>
                         <td><a href="/urls/${url.getId()}">${url.getName()}</a></td>
                         <td>${url.getCreatedAt().toString()}</td>
+                        <td></td>
                     </tr>
                     @endfor
                     </tbody>

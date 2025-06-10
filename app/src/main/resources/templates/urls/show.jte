@@ -29,6 +29,7 @@
                 <table class="table table-striped table-bordered table-hover mb-0">
                     <thead class="table-light">
                     <tr>
+                        <th style="width: 5%;">ID</th>
                         <th style="width: 5%;">Имя</th>
                         <th style="width: 20%;">Последняя проверка</th>
                         <th style="width: 10%;">Код ответа</th>
@@ -40,6 +41,7 @@
                         <td>${page.getUrl().getId()}</td>
                         <td>${page.getUrl().getName()}</td>
                         <td>${page.getUrl().getCreatedAt().toString()}</td>
+                        <td></td>
                     </tr>
                     </tbody>
                 </table>
