@@ -20,9 +20,6 @@ dependencies {
 
     implementation ("org.postgresql:postgresql:42.3.3")
 
-//    implementation ("org.projectlombok:lombok:1.18.22")
-//    implementation ("org.projectlombok:lombok:1.18.22")
-
     testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.8.2")
     testImplementation ("org.junit.jupiter:junit-jupiter-params:5.8.2")
     testImplementation ("org.assertj:assertj-core:3.22.0")
