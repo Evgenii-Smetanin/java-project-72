@@ -8,8 +8,10 @@ import gg.jte.resolve.ResourceCodeResolver;
 import hexlet.code.controller.BaseController;
 import hexlet.code.controller.UrlController;
 import hexlet.code.repository.Repository;
+import hexlet.code.util.Environment;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -21,6 +23,9 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class App {
+    @Getter
+    private static Environment environment;
+
     private static String getDatabaseUrl() {
         var databaseUrl =  System.getenv().getOrDefault("JDBC_DATABASE_URL",
                 "jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
@@ -40,6 +45,8 @@ public class App {
     }
 
     public static Javalin getApp() throws IOException, SQLException {
+        environment = System.getenv().getOrDefault("ENV", "DEV").equals("PROD") ? Environment.PROD : Environment.DEV;
+
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
 

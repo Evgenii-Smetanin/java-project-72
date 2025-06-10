@@ -1,10 +1,13 @@
 package hexlet.code.repository;
 
+import hexlet.code.App;
 import hexlet.code.exception.UrlExistsException;
 import hexlet.code.model.Url;
+import hexlet.code.util.Environment;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -48,8 +51,14 @@ public class UrlRepository extends Repository {
 
         try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, url.getName());
-            preparedStatement.setString(2, url.getCreatedAt()
-                    .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+
+            if (App.getEnvironment().equals(Environment.PROD)) {
+                preparedStatement.setTimestamp(2, Timestamp.valueOf(url.getCreatedAt()));
+            } else {
+                preparedStatement.setString(2, url.getCreatedAt()
+                        .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            }
+
             preparedStatement.executeUpdate();
         }
     }
