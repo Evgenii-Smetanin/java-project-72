@@ -13,10 +13,10 @@ public class BaseController {
         BasePage page = new BasePage();
         String flash = ctx.consumeSessionAttribute("flash");
 
-        if (flash != null) {
-            byte[] windows1251Bytes = flash.getBytes("Windows-1251");
-            flash = new String(windows1251Bytes, StandardCharsets.UTF_8);
-        }
+//        if (flash != null) {
+//            byte[] windows1251Bytes = flash.getBytes("Windows-1251");
+//            flash = new String(windows1251Bytes, StandardCharsets.UTF_8);
+//        }
 
         page.setFlash(flash);
         ctx.render("index.jte", model("page", page));
