@@ -29,7 +29,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x app/gradlew
 
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -53,7 +53,7 @@ jobs:
         uses: qltysh/qlty-action/coverage@v1
         with:
           token: ${{secrets.QLTY_COVERAGE_TOKEN}}
-          files: build/reports/jacoco/test/jacocoTestReport.xml
+          files: app/build/reports/jacoco/test/jacocoTestReport.xml
 
 #      - name: Test and collect coverage
 #        run: |
