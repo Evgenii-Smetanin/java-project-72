@@ -84,6 +84,14 @@ public class UrlRepository extends Repository {
         return urls;
     }
 
+    public static void removeAll() throws SQLException {
+        var sql = "TRUNCATE TABLE url";
+
+        try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
+            preparedStatement.executeUpdate();
+        }
+    }
+
     private static Url getUrl(PreparedStatement preparedStatement) throws SQLException {
         var resultSet = preparedStatement.executeQuery();
         Url url = null;

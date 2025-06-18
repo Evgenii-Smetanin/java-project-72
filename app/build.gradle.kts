@@ -23,6 +23,7 @@ dependencies {
     testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.8.2")
     testImplementation ("org.junit.jupiter:junit-jupiter-params:5.8.2")
     testImplementation ("org.assertj:assertj-core:3.22.0")
+    testImplementation("io.javalin:javalin-testtools:6.6.0")
 
     compileOnly ("org.projectlombok:lombok:1.18.30")
     annotationProcessor ("org.projectlombok:lombok:1.18.30")

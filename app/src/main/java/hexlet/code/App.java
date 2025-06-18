@@ -12,6 +12,7 @@ import hexlet.code.util.Environment;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -24,14 +25,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class App {
     @Getter
+    @Setter
     private static Environment environment;
-
-    private static String getDatabaseUrl() {
-        var databaseUrl =  System.getenv().getOrDefault("JDBC_DATABASE_URL",
-                "jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
-        log.info("JDBC URL: {}", databaseUrl);
-        return databaseUrl;
-    }
+    @Setter
+    private static String sqlLocation;
+    @Setter
+    private static String databaseUrl;
 
     private static int getPort() {
         String port = System.getenv().getOrDefault("PORT", "7070");
@@ -45,24 +44,8 @@ public class App {
     }
 
     public static Javalin getApp() throws IOException, SQLException {
-        environment = System.getenv().getOrDefault("ENV", "DEV").equals("PROD") ? Environment.PROD : Environment.DEV;
-
-        var hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(getDatabaseUrl());
-
-        var dataSource = new HikariDataSource(hikariConfig);
-        var sqlLocation = System.getenv().getOrDefault("SCHEMA_LOCATION", "h2/Schema.sql");
-        log.info("Schema location: {}", sqlLocation);
-
-        var sql = readResourceFile(sqlLocation);
-
-        log.info(sql);
-        try (var connection = dataSource.getConnection();
-             var statement = connection.createStatement()) {
-            statement.execute(sql);
-        }
-
-        Repository.dataSource = dataSource;
+        initEnv();
+        initDatabaseConnection();
 
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
@@ -75,6 +58,49 @@ public class App {
         app.get("/urls/{id}", UrlController::show);
 
         return app;
+    }
+
+    private static void initDatabaseConnection() throws IOException, SQLException {
+        var hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(getDatabaseUrl());
+        var dataSource = new HikariDataSource(hikariConfig);
+
+        log.info("Schema location: {}", getSqlLocation());
+        log.info("JDBC URL: {}", getDatabaseUrl());
+        var sql = readResourceFile(getSqlLocation());
+        log.info(sql);
+
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement()) {
+            statement.execute(sql);
+        }
+
+        Repository.dataSource = dataSource;
+    }
+
+
+    private static String getSqlLocation() {
+        if (sqlLocation == null) {
+            sqlLocation = System.getenv().getOrDefault("SCHEMA_LOCATION", "h2/Schema.sql");
+        }
+
+        return sqlLocation;
+    }
+
+    private static void initEnv() {
+        if (environment == null) {
+            environment = System.getenv().getOrDefault("ENV", "DEV").equals("PROD")
+                    ? Environment.PROD : Environment.DEV;
+        }
+    }
+
+    private static String getDatabaseUrl() {
+        if (databaseUrl == null) {
+            databaseUrl =  System.getenv().getOrDefault("JDBC_DATABASE_URL",
+                    "jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
+        }
+
+        return databaseUrl;
     }
 
     private static String readResourceFile(String fileName) throws IOException {

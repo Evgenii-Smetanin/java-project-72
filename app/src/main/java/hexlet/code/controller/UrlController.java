@@ -64,6 +64,7 @@ public class UrlController {
 
         if (url == null) {
             ctx.sessionAttribute("flash", "Страница не найдена");
+            ctx.status(404);
             ctx.redirect("/urls");
             return;
         }
