@@ -28,14 +28,40 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: build
+          arguments: build test jacocoTestReport
           build-root-directory: app
 
-      - name: Test & publish code coverage
+#      - name: Test with Gradle
+#        uses: gradle/actions/setup-gradle@v3
+#        with:
+#          arguments: test
+#          build-root-directory: app
+#
+#      - name: Test with Gradle
+#        uses: gradle/actions/setup-gradle@v3
+#        with:
+#          arguments: jacocoTestReport
+#          build-root-directory: app
+
+      - name: Publish coverage
         uses: qltysh/qlty-action/coverage@v1
         with:
           token: ${{secrets.QLTY_COVERAGE_TOKEN}}
-          files: reports/jacoco/test/jacocoTestReport.xml
+          files: build/reports/jacoco/test/jacocoTestReport.xml
+
+#      - name: Test and collect coverage
+#        run: |
+#          ./gradlew build
+#          ./gradlew test
+#
+#      - uses: qltysh/qlty-action/coverage@v1
+#        with:
+#          token: ${{secrets.QLTY_COVERAGE_TOKEN}}
+#          files: build/reports/jacoco/test/jacocoTestReport.xml
+#          add-prefix: app/src/main/java/
