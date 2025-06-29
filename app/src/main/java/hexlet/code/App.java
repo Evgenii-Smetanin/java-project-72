@@ -64,6 +64,8 @@ public class App {
     private static void initDatabaseConnection() throws IOException, SQLException {
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
+        hikariConfig.setMaximumPoolSize(20);
+        hikariConfig.setLeakDetectionThreshold(2000);
         var dataSource = new HikariDataSource(hikariConfig);
 
         log.info("Schema location: {}", getSqlLocation());

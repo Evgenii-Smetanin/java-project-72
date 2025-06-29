@@ -22,7 +22,8 @@ public class UrlRepository extends Repository {
         var sql = "SELECT * FROM url WHERE id = ?";
         Url url;
 
-        try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
+        try (var conn = dataSource.getConnection()) {
+            var preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, urlId);
             url = getUrl(preparedStatement);
         }
@@ -38,7 +39,8 @@ public class UrlRepository extends Repository {
         var sql = "SELECT * FROM url WHERE name = ?";
         Url url;
 
-        try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
+        try (var conn = dataSource.getConnection()) {
+            var preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, urlName);
             url = getUrl(preparedStatement);
         }
@@ -54,7 +56,8 @@ public class UrlRepository extends Repository {
         var sql = "INSERT INTO url (name, created_at) VALUES (?, ?)";
         url.setCreatedAt(LocalDateTime.now());
 
-        try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
+        try (var conn = dataSource.getConnection()) {
+            var preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, url.getName());
 
             if (App.getEnvironment().equals(Environment.PROD)) {
@@ -73,7 +76,8 @@ public class UrlRepository extends Repository {
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         urlCheck.setCreatedAt(LocalDateTime.now());
 
-        try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
+        try (var conn = dataSource.getConnection()) {
+            var preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, urlCheck.getStatusCode());
             preparedStatement.setString(2, urlCheck.getTitle());
             preparedStatement.setString(3, urlCheck.getH1());
@@ -95,7 +99,8 @@ public class UrlRepository extends Repository {
         var sql = "SELECT * FROM url ORDER BY id DESC";
         List<Url> urls = new ArrayList<>();
 
-        try (var statement = dataSource.getConnection().createStatement()) {
+        try (var conn = dataSource.getConnection()) {
+            var statement = conn.createStatement();
             var resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
@@ -115,11 +120,13 @@ public class UrlRepository extends Repository {
         var sql1 = "TRUNCATE TABLE url_check";
         var sql2 = "DELETE FROM url";
 
-        try (var preparedStatement = dataSource.getConnection().prepareStatement(sql1)) {
+        try (var conn = dataSource.getConnection()) {
+            var preparedStatement = conn.prepareStatement(sql1);
             preparedStatement.executeUpdate();
         }
 
-        try (var preparedStatement = dataSource.getConnection().prepareStatement(sql2)) {
+        try (var conn = dataSource.getConnection()) {
+            var preparedStatement = conn.prepareStatement(sql2);
             preparedStatement.executeUpdate();
         }
     }
@@ -136,8 +143,6 @@ public class UrlRepository extends Repository {
             url = new Url(id, name, createdAt, null);
         }
 
-
-
         return url;
     }
 
@@ -145,7 +150,8 @@ public class UrlRepository extends Repository {
         var sql = "SELECT * FROM url_check WHERE url_id = ?";
         List<UrlCheck> urlChecks = new ArrayList<>();
 
-        try (var preparedStatement = dataSource.getConnection().prepareStatement(sql)) {
+        try (var conn = dataSource.getConnection()) {
+            var preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, urlId);
             var resultSet = preparedStatement.executeQuery();
 
