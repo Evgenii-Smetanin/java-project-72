@@ -45,6 +45,39 @@
                     </tr>
                     </tbody>
                 </table>
+
+                <h2 class="mt-5">Проверки</h2>
+
+                <form method="post" action="/urls/1/checks">
+                    <button type="submit" class="btn btn-primary">Проверить</button>
+                </form>
+
+                <table class="table table-striped table-bordered table-hover mb-0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Статус</th>
+                        <th>Заголовок вкладки</th>
+                        <th>Заголовок первого уровня</th>
+                        <th>Описание</th>
+                        <th>Дата проверки</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    @for(var check : page.getUrl().getChecks())
+                    <tr>
+                        <td>${check.getId()}</td>
+                        <td>${check.getStatusCode()}</td>
+                        <td>${check.getTitle()}</td>
+                        <td>${check.getH1()}</td>
+                        <td>${check.getDescription()}</td>
+                        <td>${check.getCreatedAt().toString()}</td>
+                        <td></td>
+                    </tr>
+                    @endfor
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
