@@ -16,7 +16,16 @@ public class Url {
     private LocalDateTime createdAt;
     private List<UrlCheck> checks;
 
+    private LocalDateTime lastCheck;
+    private int lastStatusCode;
+
     public Url(String url) {
         this.name = url;
+    }
+
+    public Url(int id, String name, LocalDateTime createdAt) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
     }
 }

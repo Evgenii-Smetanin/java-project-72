@@ -9,6 +9,7 @@ import hexlet.code.model.dto.UrlPage;
 import hexlet.code.model.dto.UrlsPage;
 import hexlet.code.repository.UrlRepository;
 import io.javalin.http.Context;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 
 import java.io.UnsupportedEncodingException;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
+@Slf4j
 public class UrlController {
 
     public static void save(Context ctx) throws SQLException {

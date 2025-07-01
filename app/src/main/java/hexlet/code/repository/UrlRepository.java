@@ -5,6 +5,7 @@ import hexlet.code.exception.UrlExistsException;
 import hexlet.code.model.Url;
 import hexlet.code.model.UrlCheck;
 import hexlet.code.util.Environment;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class UrlRepository extends Repository {
 
     public static Url findById(int urlId) throws SQLException {
@@ -30,6 +32,7 @@ public class UrlRepository extends Repository {
 
         if (url != null) {
             url.setChecks(getChecksByUrlId(url.getId()));
+            enrichUrlWithLastCheck(url);
         }
 
         return url;
@@ -96,6 +99,7 @@ public class UrlRepository extends Repository {
     }
 
     public static List<Url> getEntities() throws SQLException {
+        log.trace("Getting Urls from DB");
         var sql = "SELECT * FROM url ORDER BY id DESC";
         List<Url> urls = new ArrayList<>();
 
@@ -108,11 +112,19 @@ public class UrlRepository extends Repository {
                 var name = resultSet.getString("name");
                 var createdAt = parseDateTime(resultSet.getString("created_at"));
 
-                var url = new Url(id, name, createdAt, null);
+                var url = new Url(id, name, createdAt);
                 urls.add(url);
             }
         }
 
+        if (!urls.isEmpty()) {
+            log.trace("Found {} Urls", urls.size());
+            enrichUrlsWithLastCheck(urls);
+        } else {
+            log.trace("No Urls found");
+        }
+
+        log.trace("Completed getting Urls from DB");
         return urls;
     }
 
@@ -140,7 +152,7 @@ public class UrlRepository extends Repository {
             var name = resultSet.getString("name");
             var createdAt = parseDateTime(resultSet.getString("created_at"));
 
-            url = new Url(id, name, createdAt, null);
+            url = new Url(id, name, createdAt);
         }
 
         return url;
@@ -179,5 +191,29 @@ public class UrlRepository extends Repository {
                 .toFormatter();
 
         return LocalDateTime.parse(dateString, formatter);
+    }
+
+    private static void enrichUrlsWithLastCheck(List<Url> urls) throws SQLException {
+        for (var url : urls) {
+            enrichUrlWithLastCheck(url);
+        }
+    }
+
+    private static void enrichUrlWithLastCheck(Url url) throws SQLException {
+        log.trace("Starting Url enrich with last Check process");
+        var sql = "SELECT * FROM url_check WHERE url_id = ? ORDER BY id DESC";
+
+        try (var conn = dataSource.getConnection()) {
+            var preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, url.getId());
+            var resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                url.setLastCheck(parseDateTime(resultSet.getString("created_at")));
+                url.setLastStatusCode(resultSet.getInt("status_code"));
+            }
+        }
+
+        log.trace("Completed Url enrich with last Check process");
     }
 }
