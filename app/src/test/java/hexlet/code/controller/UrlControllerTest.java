@@ -6,6 +6,10 @@ import hexlet.code.repository.UrlRepository;
 import hexlet.code.util.Environment;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UrlControllerTest {
 
     private Javalin app;
+    private MockWebServer mockWebServer;
 
     @BeforeEach
     public final void setUp() throws IOException, SQLException {
@@ -28,6 +33,14 @@ public class UrlControllerTest {
         App.setDatabaseUrl("jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
         app = App.getApp();
         UrlRepository.removeAll();
+
+        mockWebServer = new MockWebServer();
+        mockWebServer.start();
+    }
+
+    @AfterEach
+    void tearDown() throws IOException {
+        mockWebServer.shutdown();
     }
 
     @Test
@@ -66,6 +79,40 @@ public class UrlControllerTest {
 
             var response = client.get("/urls/1");
             assertThat(response.code()).isEqualTo(200);
+        });
+    }
+
+    @Test
+    void testCheck() throws Exception {
+        String htmlBody = "<html><head><title>Test Title</title>"
+                + "<meta name=\"description\" content=\"Test description\">"
+                + "</head><body><h1>Header</h1></body></html>";
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .setBody(htmlBody));
+
+        String mockUrl = mockWebServer.url("/").toString();
+
+        JavalinTest.test(app, (server, client) -> {
+            Url url = new Url(mockUrl);
+            UrlRepository.save(url);
+
+            var response = client.post("/urls/1/checks");
+            var savedUrl = UrlRepository.findById(1);
+
+            assertThat(response.code()).isEqualTo(200);
+
+            Assertions.assertNotNull(savedUrl);
+            assertThat(savedUrl.getChecks()).hasSize(1);
+
+            var urlCheck = savedUrl.getChecks().getFirst();
+
+            Assertions.assertNotNull(urlCheck);
+            Assertions.assertEquals(200, urlCheck.getStatusCode());
+            Assertions.assertEquals("Test Title", urlCheck.getTitle());
+            Assertions.assertEquals("Header", urlCheck.getH1());
+            Assertions.assertEquals("Test description", urlCheck.getDescription());
+            Assertions.assertEquals(1, urlCheck.getUrlId());
         });
     }
 
