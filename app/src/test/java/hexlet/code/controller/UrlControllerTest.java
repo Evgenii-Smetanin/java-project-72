@@ -83,7 +83,7 @@ public class UrlControllerTest {
     }
 
     @Test
-    void testCheck() throws Exception {
+    void whenCheckThenCallWebSiteAndReturnOk() throws Exception {
         String htmlBody = "<html><head><title>Test Title</title>"
                 + "<meta name=\"description\" content=\"Test description\">"
                 + "</head><body><h1>Header</h1></body></html>";
