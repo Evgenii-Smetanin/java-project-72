@@ -9,3 +9,6 @@
 [![docs.qlty.sh](https://img.shields.io/badge/docs-docs.qlty.sh-08b2b7)](https://docs.qlty.sh)
 
 https://page-analyzer-7ka4.onrender.com
+
+## Проект "Анализатор страниц" ("Page Analyzer")
+Cайт на базе фреймворка Javalin, который анализирует указанные страницы на SEO пригодность
