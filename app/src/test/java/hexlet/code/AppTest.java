@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BaseControllerTest {
+public class AppTest {
 
     private Javalin app;
 
