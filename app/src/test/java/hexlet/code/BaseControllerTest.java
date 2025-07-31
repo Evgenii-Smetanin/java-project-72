@@ -1,6 +1,5 @@
-package hexlet.code.controller;
+package hexlet.code;
 
-import hexlet.code.App;
 import hexlet.code.repository.UrlRepository;
 import hexlet.code.util.Environment;
 import io.javalin.Javalin;
