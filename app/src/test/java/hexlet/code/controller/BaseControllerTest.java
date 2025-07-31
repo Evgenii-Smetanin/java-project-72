@@ -20,7 +20,7 @@ public class BaseControllerTest {
     @BeforeEach
     public final void setUp() throws IOException, SQLException {
         App.setEnvironment(Environment.PROD);
-        App.setSqlLocation("h2/Schema.sql");
+        App.setSqlLocation("postgres/Schema.sql");
         app = App.getApp();
         UrlRepository.removeAll();
     }
