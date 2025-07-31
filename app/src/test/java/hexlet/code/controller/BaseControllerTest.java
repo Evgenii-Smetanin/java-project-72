@@ -26,7 +26,7 @@ public class BaseControllerTest {
     }
 
     @Test
-    public void whenIndexThenReturnOk() throws SQLException {
+    public void whenIndexThenReturnOk() {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/");
             assertThat(response.code()).isEqualTo(200);
