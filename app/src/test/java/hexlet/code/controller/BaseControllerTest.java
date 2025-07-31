@@ -21,6 +21,7 @@ public class BaseControllerTest {
     public final void setUp() throws IOException, SQLException {
         App.setEnvironment(Environment.DEV);
         App.setSqlLocation("h2/Schema.sql");
+        App.setDatabaseUrl("jdbc:h2:mem:project;DB_CLOSE_DELAY=-1;");
         app = App.getApp();
         UrlRepository.removeAll();
     }
